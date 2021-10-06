@@ -16,15 +16,24 @@ namespace Practice
         public Form1()
         {
             InitializeComponent();
-            tbInput.Text = "How can mirrors be real if our eyes aren't real";
+            tbInput.Text = "2 4 7 8 10";
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            int a = 7 - 7 % 2;
             string testText = tbInput.Text;
+            /*
+            int[][] test = new int[][]
+            {
+                new int[] {18, 20}, new int[] {45, 2}, new int[] {61, 12}, new int[] {37, 6}, new int[] {21, 21},
+                new int[] {78, 9}
+            };
+            
+            IEnumerable<string> res = OpenOrSenior(test);
+             */
 
-            tbOutput.Text = ToJadenCase(testText);
+
+            tbOutput.Text = Test(testText).ToString();
         }
         /// <summary>
         /// Преобразование слов в верблюжий стиль
@@ -53,6 +62,78 @@ namespace Practice
             return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(phrase);
             //или
             //return String.Join(" ", phrase.Split().Select(i => Char.ToUpper(i[0]) + i.Substring(1)));
+        }
+        /// <summary>
+        /// Возврат значений в зависимости от параметров
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public static IEnumerable<string> OpenOrSenior(int[][] data)
+        {
+            return data.Select(x => x[0] >= 55 && x[1] > 7 ? "Senior" : "Open").ToList();
+            /*
+            List<string> info =  new List<string>();
+
+            foreach (var r in data)
+            {
+                if (r[0] > 55 && r[1] > 7)
+                {
+                    info.Add("Senior");
+                }
+                else
+                {
+                    info.Add("Open");
+                }
+            }
+
+            return info;
+            */
+        }
+        /// <summary>
+        /// Замена букв, если в слове буква повторяется тогда возвращаем ) иначе (
+        /// </summary>
+        /// <param name="word"></param>
+        /// <returns></returns>
+        public static string DuplicateEncode(string word)
+        {
+            string result = null;
+            var test = word.ToLower().Select(x => x);
+            word.ToLower().ToList().ForEach(x=> result += test.Count(y=>y == x) > 1? ")":"(");
+            return result;
+        }
+        /// <summary>
+        /// Подсчет кол-во букв в слове
+        /// </summary>
+        /// <param name="word"></param>
+        /// <returns></returns>
+        public static string CountLetterIntoText(string word)
+        {
+            Dictionary<char,int> countLetter = new Dictionary<char, int>();
+            string result = null;
+            var test = word.ToLower().Select(x => x);
+            word.ToLower().GroupBy(x=>x).ToList().ForEach(x=> countLetter.Add(x.Key, test.Count(y => y == x.Key)));
+
+            foreach (var c in countLetter)
+            {
+                result += c.Key + " " + c.Value + "\r\n";
+            }
+            return result;
+        }
+        /// <summary>
+        /// Выбор позиции числа которое отличается от других
+        /// </summary>
+        /// <param name="numbers"></param>
+        /// <returns></returns>
+        public static int Test(string numbers)
+        {
+            int result = 0;
+            List<int> allNum = new List<int>();
+            numbers.Split(' ').ToList().ForEach(x => allNum.Add(Convert.ToInt32(x)));
+
+            result = allNum.Select(x => x).Where(x => x % 2 == 0).Count() == 1 ? 
+                allNum.IndexOf(allNum.Find(x => x % 2 == 0)) : allNum.IndexOf(allNum.Find(x => x % 2 != 0));
+
+            return result + 1;
         }
     }
 }
