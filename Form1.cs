@@ -16,7 +16,7 @@ namespace Practice
         public Form1()
         {
             InitializeComponent();
-            tbInput.Text = "2 4 7 8 10";
+            tbInput.Text = "A";
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -32,8 +32,11 @@ namespace Practice
             IEnumerable<string> res = OpenOrSenior(test);
              */
 
+            string result = null;
 
-            tbOutput.Text = Test(testText).ToString();
+            UniqueInOrder(new char[] {'1','2','2','3','3'}) ;
+
+            tbOutput.Text = result;
         }
         /// <summary>
         /// Преобразование слов в верблюжий стиль
@@ -134,6 +137,69 @@ namespace Practice
                 allNum.IndexOf(allNum.Find(x => x % 2 == 0)) : allNum.IndexOf(allNum.Find(x => x % 2 != 0));
 
             return result + 1;
+        }
+        /// <summary>
+        /// Narcissistic Number
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool Narcissistic(int value)
+        {
+            double resNumber = 0;
+            var allNumbers = value.ToString().ToList();
+            allNumbers.ForEach(x=> resNumber += Math.Pow(Convert.ToInt32(x.ToString()),allNumbers.Count()));
+
+            return resNumber == value;
+        }
+        /// <summary>
+        /// Уникальные значения массива
+        ///
+        /// uniqueInOrder("AAAABBBCCDAABBB") == {'A', 'B', 'C', 'D', 'A', 'B'}
+        /// uniqueInOrder("ABBCcAD")         == {'A', 'B', 'C', 'c', 'A', 'D'}
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="iterable"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> UniqueInOrder<T>(IEnumerable<T> iterable)
+        {
+            string result = "";
+            var typeT = typeof(T).FullName;
+            var test = iterable.ToList();
+            if (test.Count > 0)
+            {
+                string someChar = test[0].ToString();
+                result += someChar;
+                foreach (var t in test)
+                {
+                    if (someChar != t.ToString())
+                    {
+                        result += t.ToString();
+                        someChar = t.ToString();
+                    }
+                }
+
+                switch (typeT)
+                {
+                    case "System.Int32":
+                        return (IEnumerable<T>)result.ToList().ConvertAll(x => Convert.ToInt32(x.ToString()));
+                        break;
+                    case "System.Char":
+                        return (IEnumerable<T>)result.ToList().ConvertAll(x => Convert.ToChar(x.ToString()));
+                        break;
+                    case "System.Double":
+                        return (IEnumerable<T>)result.ToList().ConvertAll(x => Convert.ToDouble(x.ToString()));
+                        break;
+                    case "System.String":
+                        return (IEnumerable<T>)result.ToList().ConvertAll(x => x.ToString());
+                        break;
+
+                }
+
+            }
+
+            return (IEnumerable<T>)result.ToList();
+
+            //правильный способ return iterable.Where((x, i) => i == 0 || !Equals(x, iterable.ElementAt(i-1)));
         }
     }
 }
