@@ -16,27 +16,16 @@ namespace Practice
         public Form1()
         {
             InitializeComponent();
-            tbInput.Text = "A";
+            tbInput.Text = "indivisibility";
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            tbOutput.Clear();
+
             string testText = tbInput.Text;
-            /*
-            int[][] test = new int[][]
-            {
-                new int[] {18, 20}, new int[] {45, 2}, new int[] {61, 12}, new int[] {37, 6}, new int[] {21, 21},
-                new int[] {78, 9}
-            };
-            
-            IEnumerable<string> res = OpenOrSenior(test);
-             */
-
-            string result = null;
-
-            UniqueInOrder(new char[] {'1','2','2','3','3'}) ;
-
-            tbOutput.Text = result;
+            var result = DuplicateCount(testText);
+            tbOutput.Text = result.ToString();
         }
         /// <summary>
         /// Преобразование слов в верблюжий стиль
@@ -201,5 +190,141 @@ namespace Practice
 
             //правильный способ return iterable.Where((x, i) => i == 0 || !Equals(x, iterable.ElementAt(i-1)));
         }
+        //
+        /// <summary>
+        /// Преобразование набора чисел в формат тел
+        /// </summary>
+        /// <param name="numbers">набор чисел</param>
+        /// <returns>формат тел (123) 456-7890</returns>
+        public static string CreatePhoneNumber(int[] numbers)
+        {
+            List<int> num = numbers.ToList();
+            string result = "(";
+
+            num.Take(3).ToList().ForEach(x => result += x);
+
+            result += ") ";
+
+            num.GetRange(3,3).ForEach(x => result += x);
+
+            result += "-";
+
+            num.GetRange(6,4).ForEach(x => result += x);
+
+            return result;
+
+            //Правильный вариант
+            //return long.Parse(string.Concat(numbers)).ToString("(000) 000-0000");
+        }
+
+        public static string SpinWords(string sentence)
+        {
+            string result = null;
+
+            List<string> allWords = sentence.Split(' ').ToList<string>();
+
+            allWords.ForEach(x =>
+            {
+                if (x.Length >= 5)
+                {
+                    char[] word = x.ToArray();
+                    word.Reverse().ToList<char>().ForEach(y => result += y.ToString());
+                    result += ' ';
+                }
+                else
+                    result += x + ' ';
+            });
+
+            return result.TrimEnd();
+
+            //Лучший вариант
+            //return String.Join(" ", sentence.Split(' ').Select(str => str.Length >= 5 ? new string(str.Reverse().ToArray()) : str));
+        }
+        /// <summary>
+        /// Проверка на простое число
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        public static bool IsPrime(int n)
+        {
+            n = Math.Abs(n);
+            if (n == 2)
+                return true;
+            if (n % 2 == 0 || n<2)
+            {
+                return false;
+            }
+
+            for(int i = 2; i < Math.Sqrt(n); i++)
+            {
+                if (n % i == 0)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+
+            /*      Лучшее решение
+             if (n <= 2 || n % 2 == 0) return n == 2;
+    for (int i = 3; i <= Math.Sqrt(n); i += 2) if (n % i == 0) return false;
+    return true;
+             */
+
+        }
+        /// <summary>
+        /// Проверка на правильно расставленные скобки
+        /// </summary>
+        /// <param name="braces"></param>
+        /// <returns></returns>
+        public static bool validBraces(String braces)
+        {
+            string prev = "";
+            while (braces.Length != prev.Length)
+            {
+                prev = braces;
+                braces = braces
+                    .Replace("()", String.Empty)
+                    .Replace("[]", String.Empty)
+                    .Replace("{}", String.Empty);
+            }
+            return (braces.Length == 0);
+        }
+        /// <summary>
+        /// Количество нечетных чисел в n строке треугольника
+        ///
+        /*                 1
+                        3     5
+                     7     9    11
+                13    15    17    19
+            21    23    25    27    29*/
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        public static long rowSumOddNumbers(long n)
+        {
+            Int64 first_number = Convert.ToInt64(Math.Pow(n, 2) - (n-1));
+            Int64 result = 0;
+
+            for(int i = 0; i < n; i++)
+            {
+                result += first_number;
+                first_number += 2;
+            }
+
+            return result;
+
+            //Ну а если хорошо подумать и включить математическое мышление то можно заметить что сумма каждой строки это куб номера строки и правильное решение будет Math.Pow(n,3)
+        }
+        /// <summary>
+        /// Количество повторяющихся букв
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static int DuplicateCount(string str)
+        {
+            return str.ToLower().GroupBy(x => x).Where(x => x.Count() > 1).Count();
+        }
+
     }
 }
