@@ -34,6 +34,10 @@ namespace Practice
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tbOutput = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tbResMath = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.tbMathQuestion = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // btnTest
@@ -85,18 +89,60 @@ namespace Practice
             this.tbOutput.Size = new System.Drawing.Size(776, 101);
             this.tbOutput.TabIndex = 3;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.label3.Location = new System.Drawing.Point(961, 17);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(84, 20);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "MathAnswer";
+            // 
+            // tbResMath
+            // 
+            this.tbResMath.Location = new System.Drawing.Point(880, 102);
+            this.tbResMath.Multiline = true;
+            this.tbResMath.Name = "tbResMath";
+            this.tbResMath.Size = new System.Drawing.Size(279, 53);
+            this.tbResMath.TabIndex = 6;
+            // 
+            // button1
+            // 
+            this.button1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.button1.Location = new System.Drawing.Point(936, 161);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(169, 23);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "Вывести ответ";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.btnResMath_Click);
+            // 
+            // tbMathQuestion
+            // 
+            this.tbMathQuestion.Location = new System.Drawing.Point(880, 40);
+            this.tbMathQuestion.Multiline = true;
+            this.tbMathQuestion.Name = "tbMathQuestion";
+            this.tbMathQuestion.Size = new System.Drawing.Size(279, 53);
+            this.tbMathQuestion.TabIndex = 8;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(805, 357);
+            this.ClientSize = new System.Drawing.Size(1211, 357);
+            this.Controls.Add(this.tbMathQuestion);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.tbResMath);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.tbOutput);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tbInput);
             this.Controls.Add(this.btnTest);
             this.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.MaximumSize = new System.Drawing.Size(821, 396);
+            this.MaximumSize = new System.Drawing.Size(1800, 396);
             this.MinimumSize = new System.Drawing.Size(821, 396);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -113,6 +159,10 @@ namespace Practice
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tbOutput;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox tbResMath;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox tbMathQuestion;
     }
 }
 

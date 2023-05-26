@@ -3,7 +3,6 @@ D:\Programms\Practice\bin\Debug\net5.0-windows\Practice.deps.json
 D:\Programms\Practice\bin\Debug\net5.0-windows\Practice.runtimeconfig.json
 D:\Programms\Practice\bin\Debug\net5.0-windows\Practice.runtimeconfig.dev.json
 D:\Programms\Practice\bin\Debug\net5.0-windows\Practice.dll
-D:\Programms\Practice\bin\Debug\net5.0-windows\ref\Practice.dll
 D:\Programms\Practice\bin\Debug\net5.0-windows\Practice.pdb
 D:\Programms\Practice\obj\Debug\net5.0-windows\Practice.Form1.resources
 D:\Programms\Practice\obj\Debug\net5.0-windows\Practice.csproj.GenerateResource.cache
@@ -16,3 +15,4 @@ D:\Programms\Practice\obj\Debug\net5.0-windows\ref\Practice.dll
 D:\Programms\Practice\obj\Debug\net5.0-windows\Practice.pdb
 D:\Programms\Practice\obj\Debug\net5.0-windows\Practice.genruntimeconfig.cache
 D:\Programms\Practice\obj\Debug\net5.0-windows\Practice.csproj.AssemblyReference.cache
+D:\Programms\Practice\obj\Debug\net5.0-windows\refint\Practice.dll

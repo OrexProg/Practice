@@ -9,23 +9,30 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-
+using Interval = System.ValueTuple<int, int>;
 namespace Practice
 {
     public partial class Form1 : Form
     {
+
+        private void btnResMath_Click(object sender, EventArgs e)
+        {
+            tbResMath.Text = ForMath.MaxPrimeDevisior(Convert.ToInt64(tbMathQuestion.Text)).ToString();
+        }
         public Form1()
         {
             InitializeComponent();
             tbInput.Text = "...---... --..-- ...---... --..--";
+            tbMathQuestion.Text = "13195";
         }
-
+        
         private void button1_Click(object sender, EventArgs e)
         {
             tbOutput.Clear();
-
+            var t = new Interval[] { (1, 4), (7, 10), (3, 5) };
+            var t2 = new Interval[] { (5, 8), (3, 6), (1, 2) };
             string testText = tbInput.Text;
-            tbOutput.Text = null;
+            tbOutput.Text = SumIntervals(t2).ToString();
         }
         /// <summary>
         /// Преобразование слов в верблюжий стиль
@@ -245,7 +252,7 @@ namespace Practice
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
-        public static bool IsPrime(int n)
+        public static bool IsPrime(long n)
         {
             n = Math.Abs(n);
             if (n == 2)
@@ -574,7 +581,27 @@ namespace Practice
 
             return result;  //TODO
         }
+        /// <summary>
+        /// Сумма интервалов 
+        /// </summary>
+        /// <param name="intervals"></param>
+        /// <returns></returns>
+        public static int SumIntervals((int, int)[] intervals)
+        {
+            List<(int,int)> t = intervals.Select(x => x).OrderBy(x => x.Item1).ThenBy(x=>x.Item2).ToList();
 
-        //TestPush
+            t = t.Where(x => x.Item1 != 0 || x.Item2 != 0).ToList();
+            
+            for (int i = 1; i < t.Count - 1; i++)
+            {
+                if (t[i].Item1 < t[i - 1].Item2)
+                {
+                    t[i] = ( t[i - 1].Item2, t[i].Item2);
+                }
+            }
+            
+            return t.Select(x => x).Sum(x => x.Item2 - x.Item1);
+        }
+
     }
 }
