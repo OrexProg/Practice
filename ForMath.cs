@@ -104,6 +104,99 @@ namespace Practice
             }
             return num;
         }
+        //Переделать под Вычитание и поиск в Dictionary
+        public int[] TwoSum(int[] nums, int target)
+        {
+            for(int i = 0;i<nums.Length - 1; i++)
+            {
+                for(int j = i+1;j<nums.Length;j++)
+                    if (nums[i] + nums[j] == target)
+                        return new int[] {i,j};
+            }
+
+            return null;
+        }
+
+        public static int[] SortSQRTArray(int[] nums)
+        {
+            var result = new int[nums.Length];
+            var rightPosition = nums.Length - 1;
+            var nextRight = rightPosition;
+
+            for (int i = 0; i< nums.Length - 1; i++)
+            {
+                if (nextRight == -1)
+                {
+                    result[0] = (int)Math.Pow(nums[i], 2);
+                    break;
+                }
+                   
+                var left = (int)Math.Pow(nums[i], 2);
+                var right = (int)Math.Pow(nums[rightPosition], 2);
+
+                if (left <= right)
+                {
+                    result[nextRight] = right;
+                    rightPosition--;
+                    i--;
+                }
+                else
+                    result[nextRight] = left;
+
+                nextRight--;
+            }
+            return result;
+        }
+
+        public static bool HalvesAreAlike(string s)
+        { 
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            char[] vowels = new char[] { 'a', 'e', 'i', 'o', 'u' };
+            var left = s.ToLower().Substring(0, s.Length / 2);
+            var right = s.ToLower().Substring(s.Length / 2);
+
+            int rightCount = 0;
+            int leftCount = 0;
+
+            for(int i = 0; i < left.Length; i++)
+            {
+                if (vowels.Contains(left[i]))
+                     leftCount++; 
+            }
+
+            for (int i = 0; i < right.Length; i++)
+            {
+                if (vowels.Contains(right[i]))
+                    rightCount++;
+            }
+
+            return leftCount == rightCount;
+        }
+
+        public static bool IsPalindrome(int x)
+        {
+            var a = x.ToString();
+
+            for (int i = 1; i < a.Length; i++)
+            {
+                if (a[i-1] != a[a.Length - i])
+                    return false;
+            }
+
+            return true;
+
+            string num = x.ToString();
+
+            for (int i = 0; i < num.Length; i++)
+            {
+                if (num[i] != num[(num.Length - 1) - i])
+                    return false;
+            }
+            return true;
+        }
 
     }
+
 }

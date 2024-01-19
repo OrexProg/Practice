@@ -31,8 +31,10 @@ namespace Practice
             tbOutput.Clear();
             var t = new Interval[] { (1, 4), (7, 10), (3, 5) };
             var t2 = new Interval[] { (5, 8), (3, 6), (1, 2) };
+            var t3 = new int[] { -8,-7,-4,-3,-2, 2, 4,5,6 };
             string testText = tbInput.Text;
-            tbOutput.Text = SumIntervals(t2).ToString();
+            var res = ForMath.IsPalindrome(12121);
+            //tbOutput.Text = ForMath.SortSQRTArray(t3).ToList();
         }
         /// <summary>
         /// Преобразование слов в верблюжий стиль
@@ -178,17 +180,12 @@ namespace Practice
                 {
                     case "System.Int32":
                         return (IEnumerable<T>)result.ToList().ConvertAll(x => Convert.ToInt32(x.ToString()));
-                        break;
                     case "System.Char":
                         return (IEnumerable<T>)result.ToList().ConvertAll(x => Convert.ToChar(x.ToString()));
-                        break;
                     case "System.Double":
                         return (IEnumerable<T>)result.ToList().ConvertAll(x => Convert.ToDouble(x.ToString()));
-                        break;
                     case "System.String":
                         return (IEnumerable<T>)result.ToList().ConvertAll(x => x.ToString());
-                        break;
-
                 }
 
             }
