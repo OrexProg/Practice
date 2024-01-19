@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Practice.Form1;
 
 namespace Practice
 {
@@ -186,17 +187,83 @@ namespace Practice
             }
 
             return true;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="strs"></param>
+        /// <returns>Возвращает одинаковое начало всех слов в списке</returns>
+        public static string LongestCommonPrefix(string[] strs)
+        {
+            string result = "";
+            if (strs.Count() <= 1)
+                return strs[0];
 
-            string num = x.ToString();
+            var firstWorld = strs[0];
+            if (firstWorld.Length == 0)
+                return "";
 
-            for (int i = 0; i < num.Length; i++)
+            for(int i = 0; i < firstWorld.Length; i++)
             {
-                if (num[i] != num[(num.Length - 1) - i])
-                    return false;
+                var letter = firstWorld[i];
+                
+                for(int j = 1; j < strs.Count(); j++)
+                {
+                    if (i >= strs[j].Length)
+                        return result;
+                    if(letter != strs[j][i])
+                        return result;
+                }
+                result += letter;
             }
-            return true;
+
+            return result;
         }
 
+        public static int RemoveDuplicates(int[] nums)
+        {
+            var result = nums.GroupBy(x => x).Count();
+            int[] newNums = new int[result];
+            int max = 0;
+            int count = 0;
+            for(int i = 0;i< nums.Length; i++)
+            {
+                if (max < nums[i])
+                {
+                    max = nums[i];
+                    newNums[count] = max;
+                    count++;
+                }
+
+            }
+            nums = newNums;
+            return result;
+        }
+        /// <summary>
+        /// Вывести кол-во букв, которые не повторяются (подряд)
+        /// пример   "abcabcbb" => 3 "abc"
+        /// "pwwkew" => 3 "wke"
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static int LengthOfLongestSubstring(string s)
+        {
+            if (s.Length <= 1) return s.Length;
+            int max = 0;
+            string result = "";
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (result.Contains(s[i]))
+                {
+                    var indx =  result.IndexOf(s[i]);
+                    max = result.Length >= max ? result.Length : max;
+                    result = result.Remove(0, indx == 0 ? 1 : indx+1);
+                }
+                result += s[i];
+            }
+
+            return Math.Max(max,result.Length);
+        }
     }
 
 }

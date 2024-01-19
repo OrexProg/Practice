@@ -15,6 +15,8 @@ namespace Practice
     public partial class Form1 : Form
     {
 
+       
+
         private void btnResMath_Click(object sender, EventArgs e)
         {
             tbResMath.Text = ForMath.MaxPrimeDevisior(Convert.ToInt64(tbMathQuestion.Text)).ToString();
@@ -33,7 +35,10 @@ namespace Practice
             var t2 = new Interval[] { (5, 8), (3, 6), (1, 2) };
             var t3 = new int[] { -8,-7,-4,-3,-2, 2, 4,5,6 };
             string testText = tbInput.Text;
-            var res = ForMath.IsPalindrome(12121);
+            var res = ForMath.LengthOfLongestSubstring("ohvhjdml");
+            var res2 = ForMath.LengthOfLongestSubstring("aabaab!bb");
+            var res3 = ForMath.LengthOfLongestSubstring("aab");
+            var res4 = ForMath.LengthOfLongestSubstring("dvdf");
             //tbOutput.Text = ForMath.SortSQRTArray(t3).ToList();
         }
         /// <summary>
@@ -599,6 +604,7 @@ namespace Practice
             
             return t.Select(x => x).Sum(x => x.Item2 - x.Item1);
         }
+        
 
     }
 }

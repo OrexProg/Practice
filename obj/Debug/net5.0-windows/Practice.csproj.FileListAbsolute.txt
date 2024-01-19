@@ -22,7 +22,6 @@ P:\MyProgramms\Practice\bin\Debug\net5.0-windows\Practice.runtimeconfig.json
 P:\MyProgramms\Practice\bin\Debug\net5.0-windows\Practice.runtimeconfig.dev.json
 P:\MyProgramms\Practice\bin\Debug\net5.0-windows\Practice.dll
 P:\MyProgramms\Practice\bin\Debug\net5.0-windows\Practice.pdb
-P:\MyProgramms\Practice\obj\Debug\net5.0-windows\Practice.csproj.AssemblyReference.cache
 P:\MyProgramms\Practice\obj\Debug\net5.0-windows\Practice.Form1.resources
 P:\MyProgramms\Practice\obj\Debug\net5.0-windows\Practice.csproj.GenerateResource.cache
 P:\MyProgramms\Practice\obj\Debug\net5.0-windows\Practice.GeneratedMSBuildEditorConfig.editorconfig
@@ -34,3 +33,4 @@ P:\MyProgramms\Practice\obj\Debug\net5.0-windows\refint\Practice.dll
 P:\MyProgramms\Practice\obj\Debug\net5.0-windows\Practice.pdb
 P:\MyProgramms\Practice\obj\Debug\net5.0-windows\Practice.genruntimeconfig.cache
 P:\MyProgramms\Practice\obj\Debug\net5.0-windows\ref\Practice.dll
+P:\MyProgramms\Practice\obj\Debug\net5.0-windows\Practice.sourcelink.json
