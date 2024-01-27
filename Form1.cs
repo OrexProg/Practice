@@ -19,7 +19,7 @@ namespace Practice
 
         private void btnResMath_Click(object sender, EventArgs e)
         {
-            tbResMath.Text = ForMath.MaxPrimeDevisior(Convert.ToInt64(tbMathQuestion.Text)).ToString();
+            //tbResMath.Text = ForMath.MaxPrimeDevisior(Convert.ToInt64(tbMathQuestion.Text)).ToString();
         }
         public Form1()
         {
@@ -31,14 +31,9 @@ namespace Practice
         private void button1_Click(object sender, EventArgs e)
         {
             tbOutput.Clear();
-            var t = new Interval[] { (1, 4), (7, 10), (3, 5) };
             var t2 = new Interval[] { (5, 8), (3, 6), (1, 2) };
-            var t3 = new int[] { -8,-7,-4,-3,-2, 2, 4,5,6 };
-            string testText = tbInput.Text;
-            var res = ForMath.LengthOfLongestSubstring("ohvhjdml");
-            var res2 = ForMath.LengthOfLongestSubstring("aabaab!bb");
-            var res3 = ForMath.LengthOfLongestSubstring("aab");
-            var res4 = ForMath.LengthOfLongestSubstring("dvdf");
+
+            var t = ForMath.SearchInsert(new int[] { 1, 3, 5, 6}, 2);
             //tbOutput.Text = ForMath.SortSQRTArray(t3).ToList();
         }
         /// <summary>

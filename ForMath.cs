@@ -14,7 +14,7 @@ namespace Practice
         /// </summary>
         /// <param name="maxNum">до какого числа ищем</param>
         /// <returns></returns>
-        public static int SumCrat5and3(int maxNum)
+        private static int SumCrat5and3(int maxNum)
         {
             int result = 0;
             for(int i = 0; i < maxNum; i++)
@@ -41,7 +41,7 @@ namespace Practice
         /// </summary>
         /// <param name="maxNum">макимальное число фибоначи</param>
         /// <returns></returns>
-        public static int SumEvenNumFi(int maxNum)
+        private static int SumEvenNumFi(int maxNum)
         {
             Int32 result = 2;
             int prev1 = 1;
@@ -63,7 +63,7 @@ namespace Practice
         /// </summary>
         /// <param name="num"></param>
         /// <returns></returns>
-        public static string MaxPrimeDevisior(long num)
+        private static string MaxPrimeDevisior(long num)
         {
             string result = null;
 
@@ -106,7 +106,7 @@ namespace Practice
             return num;
         }
         //Переделать под Вычитание и поиск в Dictionary
-        public int[] TwoSum(int[] nums, int target)
+        private int[] TwoSum(int[] nums, int target)
         {
             for(int i = 0;i<nums.Length - 1; i++)
             {
@@ -118,7 +118,7 @@ namespace Practice
             return null;
         }
 
-        public static int[] SortSQRTArray(int[] nums)
+        private static int[] SortSQRTArray(int[] nums)
         {
             var result = new int[nums.Length];
             var rightPosition = nums.Length - 1;
@@ -149,7 +149,7 @@ namespace Practice
             return result;
         }
 
-        public static bool HalvesAreAlike(string s)
+        private static bool HalvesAreAlike(string s)
         { 
             GC.Collect();
             GC.WaitForPendingFinalizers();
@@ -176,7 +176,7 @@ namespace Practice
             return leftCount == rightCount;
         }
 
-        public static bool IsPalindrome(int x)
+        private static bool IsPalindrome(int x)
         {
             var a = x.ToString();
 
@@ -193,7 +193,7 @@ namespace Practice
         /// </summary>
         /// <param name="strs"></param>
         /// <returns>Возвращает одинаковое начало всех слов в списке</returns>
-        public static string LongestCommonPrefix(string[] strs)
+        private static string LongestCommonPrefix(string[] strs)
         {
             string result = "";
             if (strs.Count() <= 1)
@@ -220,7 +220,7 @@ namespace Practice
             return result;
         }
 
-        public static int RemoveDuplicates(int[] nums)
+        private static int RemoveDuplicates(int[] nums)
         {
             var result = nums.GroupBy(x => x).Count();
             int[] newNums = new int[result];
@@ -246,23 +246,78 @@ namespace Practice
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
-        public static int LengthOfLongestSubstring(string s)
+        private static int LengthOfLongestSubstring(string s)
         {
             if (s.Length <= 1) return s.Length;
             int max = 0;
-            string result = "";
+            StringBuilder result = new StringBuilder("");
             for (int i = 0; i < s.Length; i++)
             {
-                if (result.Contains(s[i]))
+                if (result.ToString().Contains(s[i]))
                 {
-                    var indx =  result.IndexOf(s[i]);
+                    var indx =  result.ToString().IndexOf(s[i]);
                     max = result.Length >= max ? result.Length : max;
                     result = result.Remove(0, indx == 0 ? 1 : indx+1);
                 }
-                result += s[i];
+                result.Append(s[i]);
             }
 
             return Math.Max(max,result.Length);
+        }
+        /// <summary>
+        /// Нфйти позицию вхождения одного string в другой
+        /// </summary>
+        /// <param name="haystack"></param>
+        /// <param name="needle"></param>
+        /// <returns></returns>
+        private static int StrStr(string haystack, string needle)
+        {
+            //Самое простое решение
+            var t= haystack.IndexOf(needle);
+
+            if (needle.Length > haystack.Length)
+                return -1;
+
+            int firstWordPos = 0;
+            int secondWordPos = 0;
+            int errorPlace = 0;
+            while(firstWordPos < haystack.Length)
+            {
+                if (haystack[firstWordPos] == needle[secondWordPos])
+                {
+                    firstWordPos++;
+                    secondWordPos++;
+                }
+                else
+                {
+                    errorPlace++;
+                    secondWordPos = 0;
+                    firstWordPos = errorPlace;
+                }
+                if (secondWordPos == needle.Length)
+                    return errorPlace;
+            }
+
+            return -1;
+        }
+        /// <summary>
+        /// Найти позицию (отсортированного массива) вхождения числа target 
+        /// если ее нет то укажите позицию где она должна быть
+        /// </summary>
+        /// <param name="nums"></param>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        public static int SearchInsert(int[] nums, int target)
+        {
+            for(int i = 0;i< nums.Length; i++)
+            {
+                if (nums[i] == target) 
+                    return i;
+                if (nums[i] > target)
+                    return i--;
+            }
+
+            return nums.Length;
         }
     }
 
