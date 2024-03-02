@@ -33,8 +33,9 @@ namespace Practice
             tbOutput.Clear();
             var t2 = new Interval[] { (5, 8), (3, 6), (1, 2) };
 
-            var t = ForMath.SearchInsert(new int[] { 1, 3, 5, 6}, 2);
-            //tbOutput.Text = ForMath.SortSQRTArray(t3).ToList();
+            ForMath.Merge(new int[] { 1, 2, 3, 0, 0, 0 }, 3, new int[] { 2, 5, 6 }, 3);
+            
+            //110101
         }
         /// <summary>
         /// Преобразование слов в верблюжий стиль

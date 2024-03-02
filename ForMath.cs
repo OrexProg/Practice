@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 using static Practice.Form1;
@@ -307,7 +308,7 @@ namespace Practice
         /// <param name="nums"></param>
         /// <param name="target"></param>
         /// <returns></returns>
-        public static int SearchInsert(int[] nums, int target)
+        private static int SearchInsert(int[] nums, int target)
         {
             for(int i = 0;i< nums.Length; i++)
             {
@@ -318,6 +319,192 @@ namespace Practice
             }
 
             return nums.Length;
+        }
+        /// <summary>
+        /// Поиск длины последнего слова
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        private static int LengthOfLastWord(string s)
+        {
+            var list = s.Split(' ');
+
+            for(int i = list.Length-1; i>=0;i--)
+            {
+                if (list[i].Length > 0)
+                    return list[i].Length;
+            }
+            
+            return 0;
+
+            /*
+             Лучшее решение return (s.TrimEnd()).Split(' ').Last().Length;
+             */
+        }
+        
+        private static int[] PlusOne(int[] digits)
+        {
+            int currentNum = digits[^1]+1;
+
+            if(currentNum/10 ==0)
+            {
+                digits[^1] = currentNum;
+                return digits;
+            }
+
+            digits[^1] = digits[^1] + 1;
+
+            for (int i = digits.Length - 1; i >= 0; i--)
+            {
+                if (digits[i]/ 10 == 0)
+                    return digits;
+
+                if (i > 0)
+                {
+                    digits[i-1] = digits[i-1] + (digits[i]/10);
+                    digits[i] = digits[i]%10;
+                }
+            }
+            var result = new int[digits.Length+1];
+            result[0] = 1;
+
+            return result;
+        }
+        /// <summary>
+        /// Сложение бинарных чисел
+        /// </summary>
+        /// <param name="a">бинарное число</param>
+        /// <param name="b">бинарное число</param>
+        /// <returns></returns>
+        private static string AddBinary(string a, string b)
+        {
+            if (a==b&&a=="0")
+            {
+                return "0";
+            }
+
+            var len = Math.Max(a.Length, b.Length);
+            short nextNum = 0;
+            short[] result = new short[len+1];
+
+            var countA = a.Length-1;
+            var countB = b.Length-1;
+
+            for(int i = len; i >= 0; i--)
+            {
+                short first = 0;
+                short second = 0;
+                
+                if(countA >= 0)
+                {
+                    first = short.Parse(a[countA].ToString());
+                    countA--;
+                }
+                    
+                if (countB >= 0)
+                {
+                    second = short.Parse(b[countB].ToString());
+                    countB--;
+                }
+
+                var sum = nextNum + first + second ;
+
+                switch (sum)
+                {
+                    case 0:
+                        result[i] = 0;
+                        nextNum = 0;
+                        break;
+                    case 1:
+                        result[i] = 1;
+                        nextNum = 0;
+                        break;
+                    case 2:
+                        result[i] = 0;
+                        nextNum = 1;
+                        break;
+                    case 3:
+                        result[i] = 1;
+                        nextNum = 1;
+                        break;
+                }
+            }
+
+            return string.Join("", result.SkipWhile(x=>x==0).Select(x => x.ToString()).ToList());
+        }
+        /// <summary>
+        /// Кол-во возможных способов забраться по лестнице (с шагом 1 или 2)
+        /// </summary>
+        /// <param name="n">кол-во ступенек</param>
+        /// <returns>кол-во вариантов</returns>
+        private static int ClimbStairs(int n)
+        {
+            //просто числа Фибоначчи из результата
+
+            if (n <= 1)
+            {
+                return 1;
+            }
+
+            int prev1 = 1;
+            int prev2 = 1;
+            int current = 0;
+
+            for (int i = 2; i <= n; i++)
+            {
+                current = prev1 + prev2;
+                prev1 = prev2;
+                prev2 = current;
+            }
+
+            return current;
+        }
+
+        public static void Merge(int[] nums1, int m, int[] nums2, int n)
+        {
+            if (m == 0)
+            {
+                for(int i = 0;i<nums2.Length;i++)
+                {
+                    nums1[i] = nums2[i];
+                }
+            
+            }
+
+
+            int maxLen = m+n;
+            int[] copyLeft = (int[])nums1.Clone();
+            int place = 0;
+            int leftArayPosition = 0;
+            int rightArayPosition = 0;
+
+            while(place < maxLen )
+            {
+
+                if(leftArayPosition < m && rightArayPosition <n)
+                {
+                    if (copyLeft[leftArayPosition] <= nums2[rightArayPosition])
+                    {
+                        nums1[place] = copyLeft[leftArayPosition];
+                        leftArayPosition++;
+                    }
+                    else
+                    {
+                        nums1[place] = nums2[rightArayPosition];
+                        rightArayPosition++;
+                    }
+                }
+                else
+                {
+                    if (leftArayPosition < m)
+                        nums1[place] = copyLeft[leftArayPosition++];
+                    else
+                        nums1[place] = nums2[rightArayPosition++]; 
+                }
+                
+
+                place++;
+            }
         }
     }
 
