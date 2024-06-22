@@ -32,3 +32,8 @@
 *.app
 .vs/Practice/v16/.suo
 *.v2
+.vs\
+.vs/
+obj/
+obj\
+.vs/Practice/v17/.suo
