@@ -10,16 +10,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Interval = System.ValueTuple<int, int>;
+using static Practice.Form1;
+using System.Xml.Linq;
+using System.ComponentModel.Design.Serialization;
 namespace Practice
 {
     public partial class Form1 : Form
     {
-
-       
+        public class TreeNode
+        {
+            public int? val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int? val = 0, TreeNode left = null, TreeNode right = null)
+            {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+            }
+        }
 
         private void btnResMath_Click(object sender, EventArgs e)
         {
-            //tbResMath.Text = ForMath.MaxPrimeDevisior(Convert.ToInt64(tbMathQuestion.Text)).ToString();
+            //tbResMath.Text = MathSolution.MaxPrimeDevisior(Convert.ToInt64(tbMathQuestion.Text)).ToString();
         }
         public Form1()
         {
@@ -27,14 +40,91 @@ namespace Practice
             tbInput.Text = "...---... --..-- ...---... --..--";
             tbMathQuestion.Text = "13195";
         }
+
+        private TreeNode FindFirstEmptyLeaf(TreeNode root,int value)
+        {
+            TreeNode leftTree = root.left;
+            TreeNode rightTree = root.right;
+
+            if(leftTree.left == null)
+            {
+                leftTree.left = new TreeNode(value);
+                return leftTree;
+            }
+            else if(leftTree.right == null)
+            {
+                leftTree.right = new TreeNode(value);
+                return rightTree;
+            }
+
+            if(rightTree.left == null)
+            {
+                rightTree.left = new TreeNode(value);
+                return rightTree;
+            }
+            else if (rightTree.right == null)
+            {
+                rightTree.right = new TreeNode(value);
+                return rightTree;
+            }
+
+            return FindFirstEmptyLeaf(leftTree, value);
+        }
+
+        private void AddIntoTreeWithoutSort(ref TreeNode root,int value)
+        {
+            if(root.left != null && root.right != null)
+            {
+                FindFirstEmptyLeaf(root, value);
+            }
+            if(root.left == null)
+            {
+                root.left = new TreeNode(value);
+                return;
+            }
+            if(root.right == null)
+            {
+                root.right = new TreeNode(value);
+                return;
+            }
+        }
+
+        private TreeNode UpdateEmptyLeeaf (TreeNode root)
+        {
+            TreeNode result = root;
+
+            if(result.left?.val == -1)
+                result.left = null;
+            if(result.right?.val == -1)
+                result.right = null;
+
+            if (result.left != null)
+                result.left = UpdateEmptyLeeaf(result.left);
+            if(result.right != null)
+                result.right = UpdateEmptyLeeaf(result.right);
+
+            return result;
+        }
+
+        private TreeNode CreateNodeWithouSort(int?[] list)
+        {
+            TreeNode node = new TreeNode(list[0]);
+
+            for(int i = 1;i<list.Length;i++)
+            {
+                AddIntoTreeWithoutSort(ref node, list[i] ?? -1);
+            }
+
+            UpdateEmptyLeeaf(node);
+
+            return node;
+        }
         
         private void button1_Click(object sender, EventArgs e)
         {
             tbOutput.Clear();
-            var t2 = new Interval[] { (5, 8), (3, 6), (1, 2) };
-
-            ForMath.Merge(new int[] { 1, 2, 3, 0, 0, 0 }, 3, new int[] { 2, 5, 6 }, 3);
-            
+            var tNode = CreateNodeWithouSort(new int?[] { 5, 4, 8, 11, null, 13, 4, 7, 2, null, null, null, 1 });//4
+            //var res = MathSolution.Generate(5);
             //110101
         }
         /// <summary>
@@ -296,7 +386,7 @@ namespace Practice
             return (braces.Length == 0);
         }
         /// <summary>
-        /// Количество нечетных чисел в n строке треугольника
+        /// Сумма нечетных чисел в n строке треугольника
         ///
         /*                 1
                         3     5
@@ -515,7 +605,7 @@ namespace Practice
             return new String(res.Reverse().ToArray());
         }
         /// <summary>
-        /// Вывод диапозона чисел если больше 3 то через - если не подряд или 2 то через запятую
+        /// Вывод диапазона чисел если больше 3 то через - если не подряд или 2 то через запятую
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>

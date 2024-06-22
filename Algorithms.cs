@@ -8,8 +8,38 @@ using static Practice.Form1;
 
 namespace Practice
 {
-    public class ForMath
+    public class Algorithms
     {
+        private static TreeNode AddNode(TreeNode node, int num)
+        {
+            if (num < node.val)
+            {
+                if (node.left == null)
+                    node.left = new TreeNode(num);
+                else
+                    AddNode(node.left, num);
+            }
+            else
+            {
+                if (node.right == null)
+                    node.right = new TreeNode(num);
+                else
+                    AddNode(node.right, num);
+            }
+            return node;
+        }
+        public static TreeNode CreateNodeSort(int[] nums)
+        {
+            if (!nums.Any()) return null;
+            TreeNode node = new TreeNode(nums[0]);
+
+            for (int i = 1; i < nums.Length; i++)
+            {
+                AddNode(node, nums[i]);
+            }
+
+            return node;
+        }
         /// <summary>
         /// Подсчет суммы чисел кратных 5 и 3
         /// </summary>
@@ -266,7 +296,7 @@ namespace Practice
             return Math.Max(max,result.Length);
         }
         /// <summary>
-        /// Нфйти позицию вхождения одного string в другой
+        /// Найти позицию вхождения одного string в другой
         /// </summary>
         /// <param name="haystack"></param>
         /// <param name="needle"></param>
@@ -460,7 +490,7 @@ namespace Practice
             return current;
         }
 
-        public static void Merge(int[] nums1, int m, int[] nums2, int n)
+        private static void Merge(int[] nums1, int m, int[] nums2, int n)
         {
             if (m == 0)
             {
@@ -506,6 +536,163 @@ namespace Practice
                 place++;
             }
         }
-    }
+        /// <summary>
+        /// Сравнение 2 бинарных деревьев
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="q"></param>
+        /// <returns></returns>
+        private static bool IsSameTree(TreeNode p, TreeNode q)
+        {
+            if (p == null && q == null) return true;
+
+            if (p == null && q != null) return false;
+            if (p != null && q == null) return false;
+
+            if (p.val != q.val)
+                return false;
+            else
+                return IsSameTree(p.left, q.left) && IsSameTree(p.right, q.right);
+        }
+
+        private static int CountSubstrings(string s)
+        {
+            return s.ToList().Count();
+        }
+
+        private bool CheckSimetric(TreeNode left, TreeNode right)
+        {
+            if (left == null || right == null)
+                return true;
+
+            if(left?.val != right?.val) 
+                return false;
+
+            return CheckSimetric(left.right, right.left) && CheckSimetric(left.left,right.right);
+        }
+        public bool IsSymmetric(TreeNode root)
+        {
+
+            if(root.left.val != root.right.val)
+                return false;
+
+            return CheckSimetric(root.left,root.right);
+        }
+        //Подсчет глубины
+        private  int CheckRoot(int result, TreeNode left, TreeNode right)
+        {
+            if (left?.val != null || right?.val != null)
+                result++;
+            else
+                return ++result;
+
+            return Math.Max(CheckRoot(result,left.left,left.right),CheckRoot(result,right.left,right.right));  
+        }
+        public  int MaxDepth(TreeNode root)
+        {
+            int result = 0;
+            result = CheckRoot(result, root.left, root.right);
+            return result;
+        }
+        /// <summary>
+        /// Подсчет глубины улучшенный
+        /// </summary>
+        /// <param name="root"></param>
+        /// <returns></returns>
+        private int MaxDepthBest(TreeNode root)
+        {
+            int left = MaxDepthBest(root.left);
+            int right = MaxDepthBest(root.right);
+
+            return Math.Max(left, right) + 1;
+        }
+
+        private int MinDepth(TreeNode root)
+        {
+            if(root == null)
+                return 0;
+            if (root.left == null && root.right == null)
+                return 1;
+
+            if(root.left == null) 
+                return MinDepth(root.right) +1;
+
+            if(root.right == null)
+                return MinDepth(root.left) +1;
+
+
+            return Math.Min(MinDepth(root.right), MinDepth(root.left)) + 1;
+        }
+        /// <summary>
+        /// Проверка суммы ветвей с целевым значением
+        /// </summary>
+        /// <param name="root"></param>
+        /// <param name="targetSum"></param>
+        /// <returns></returns>
+        private bool HasPathSum(TreeNode root, int targetSum)
+        {
+            if (root == null)
+            {
+                return false;
+            }
+
+            if (root.left == null && root.right == null)
+            {
+                return targetSum == root.val;
+            }
+
+            bool leftSum = HasPathSum(root.left, targetSum - root.val ?? 0);
+            bool rightSum = HasPathSum(root.right, targetSum - root.val ?? 0);
+
+            return leftSum || rightSum;
+        }
+
+        private static List<int> AddList(List<int> prevList ) 
+        {
+            List<int> result = new List<int>();
+
+            if (prevList.Count == 0)
+                return new List<int> { 1 };
+
+            if(prevList.Count == 1) 
+                return new List<int> { 1,1 };
+
+            int current = 0;
+
+            for(int i = 0;i<prevList.Count;i++)
+            {
+                result.Add(prevList[i] + current);
+                current = prevList[i];
+            }
+
+            result.Add(1);
+
+            return result;
+        }
+        /// <summary>
+        /// Построение треугольника Паскаля
+        /// </summary>
+        /// <param name="numRows"></param>
+        /// <returns></returns>
+        private static IList<IList<int>> Generate(int numRows)
+        {
+            if(numRows <= 0)
+                return null;
+            if(numRows == 1)
+                return new List<IList<int>>() { new List<int> { 1 } };
+
+            IList<IList<int>> result = new List<IList<int>>();
+            List<int> prevList = new List<int>();
+
+            for (int i = 0; i < numRows; i++)
+            {
+               prevList = AddList(prevList);
+                result.Add(prevList);
+            }
+
+            return result;
+        }
+
+    };
 
 }
