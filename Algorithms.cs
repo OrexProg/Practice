@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using static Practice.Form1;
@@ -10,6 +11,15 @@ namespace Practice
 {
     public class Algorithms
     {
+        public static string ReturnAnswer()
+        {
+            var alg = new Algorithms();
+            string ans = null;
+            ans = alg.ConvertWordBest("ABCDEFGHIJKLMN",3);
+            return ans;
+        }
+
+        #region Solve
         private static TreeNode AddNode(TreeNode node, int num)
         {
             if (num < node.val)
@@ -691,6 +701,69 @@ namespace Practice
             }
 
             return result;
+        }
+        /// <summary>
+        /// Поиск самого большого палиндрома
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        private static string LongestPalindrome(string s)
+        {
+            if(s.Length==1)
+                return s;
+            StringBuilder manacharString = new StringBuilder();
+            manacharString.Append("^#");
+            for(int i = 0;i< s.Length;i++)
+                manacharString.Append((char)s[i]).Append("#");
+
+            manacharString.Append("$");
+           
+            int[] P = new int[manacharString.Length];
+            int C = 0, R = 0;
+
+            for (int i = 1; i < manacharString.Length - 1; i++)
+            {
+                P[i] = (R > i) ? Math.Min(R - i, P[2 * C - i]) : 0;
+                while (manacharString[i + 1 + P[i]] == manacharString[i - 1 - P[i]])
+                    P[i]++;
+                   
+                if (i + P[i] > R)
+                {
+                    C = i;
+                    R = i + P[i];
+                }
+            }
+
+            int max_len = P.Max();
+            int center_index = Array.IndexOf(P, max_len);
+            return s.Substring((center_index - max_len) / 2, max_len);
+        }
+
+
+        #endregion
+        
+        private string ConvertWordBest(string s, int numRows)
+        {
+            if (numRows == 1 || s.Length <= 1)
+            {
+                return s;
+            }
+
+            string[] result = new string[numRows];
+
+            int currentPosition = 0;
+            int direction = 1;
+            foreach (char c in s)
+            {
+                result[currentPosition] += c;
+
+                currentPosition += direction;
+
+                if (currentPosition == numRows - 1 || currentPosition == 0) 
+                    direction *= -1;
+            }
+
+            return string.Concat(result);
         }
 
     };

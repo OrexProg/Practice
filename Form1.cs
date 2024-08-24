@@ -124,6 +124,7 @@ namespace Practice
         {
             tbOutput.Clear();
             var tNode = CreateNodeWithouSort(new int?[] { 5, 4, 8, 11, null, 13, 4, 7, 2, null, null, null, 1 });//4
+            tbOutput.Text = Algorithms.ReturnAnswer();
             //var res = MathSolution.Generate(5);
             //110101
         }
