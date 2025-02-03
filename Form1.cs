@@ -17,6 +17,23 @@ namespace Practice
 {
     public partial class Form1 : Form
     {
+        public Form1()
+        {
+            InitializeComponent();
+            tbInput.Text = "4556364607935616";
+            tbMathQuestion.Text = "13195";
+        }
+        private void CodeWarsAnswer(object sender, EventArgs e)
+        {
+            
+            tbOutput.Clear();
+            var res = CodeWars.MoveZeroes(new int[] { 0,0,1,2,4,3,8,6,7 });
+            tbOutput.Text = res.ToString();
+                
+            //var res = MathSolution.Generate(5);
+            //110101
+        }
+
         public class TreeNode
         {
             public int? val;
@@ -34,12 +51,7 @@ namespace Practice
         {
             //tbResMath.Text = MathSolution.MaxPrimeDevisior(Convert.ToInt64(tbMathQuestion.Text)).ToString();
         }
-        public Form1()
-        {
-            InitializeComponent();
-            tbInput.Text = "...---... --..-- ...---... --..--";
-            tbMathQuestion.Text = "13195";
-        }
+       
 
         private TreeNode FindFirstEmptyLeaf(TreeNode root,int value)
         {
@@ -120,14 +132,7 @@ namespace Practice
             return node;
         }
         
-        private void button1_Click(object sender, EventArgs e)
-        {
-            tbOutput.Clear();
-            var tNode = CreateNodeWithouSort(new int?[] { 5, 4, 8, 11, null, 13, 4, 7, 2, null, null, null, 1 });//4
-            tbOutput.Text = Algorithms.ReturnAnswer();
-            //var res = MathSolution.Generate(5);
-            //110101
-        }
+       
         /// <summary>
         /// Преобразование слов в верблюжий стиль
         /// </summary>

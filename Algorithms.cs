@@ -15,7 +15,7 @@ namespace Practice
         {
             var alg = new Algorithms();
             string ans = null;
-            ans = alg.ConvertWordBest("ABCDEFGHIJKLMN",3);
+            ans = alg.Reverse(-2147483648).ToString();
             return ans;
         }
 
@@ -738,11 +738,7 @@ namespace Practice
             int center_index = Array.IndexOf(P, max_len);
             return s.Substring((center_index - max_len) / 2, max_len);
         }
-
-
-        #endregion
-        
-        private string ConvertWordBest(string s, int numRows)
+private string ConvertWordBest(string s, int numRows)
         {
             if (numRows == 1 || s.Length <= 1)
             {
@@ -764,6 +760,23 @@ namespace Practice
             }
 
             return string.Concat(result);
+        }
+
+        #endregion
+
+        public int Reverse(int x)
+        {
+            int result = 0;
+            if (x <= Int32.MinValue)
+                return 0;
+            string strResult = Math.Abs(x).ToString();
+
+            char[] charArray = strResult.ToCharArray();
+            Array.Reverse(charArray);
+            string reverseResult = string.Format("{0}{1}", x > 0 ? "" : "-", new string(charArray));  
+            Int32.TryParse(reverseResult,out result);
+
+            return result;
         }
 
     };
