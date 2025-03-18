@@ -10,6 +10,66 @@ namespace Practice
         #region Решено
 
         /// <summary>
+        /// Возвращаем время из секуннд в формате чч:мм:сс
+        /// </summary>
+        /// <param name="seconds"></param>
+        /// <returns></returns>
+        public static string GetReadableTime(int seconds)
+        {
+            /*
+              Лучший вариант
+            var t = TimeSpan.FromSeconds(seconds);
+        return string.Format("{0:00}:{1:00}:{2:00}", (int)t.TotalHours, t.Minutes, t.Seconds);
+             
+             */
+
+            int h = 0;
+            int m = 0;
+            int s = 0;
+
+            if (seconds > 360060)
+            {
+                return "99;59;59";
+            }
+            if (seconds <= 59)
+                return "00:00:" + (seconds > 9 ? seconds.ToString() : "0" + seconds.ToString());
+            if (seconds <= 3599)
+            {
+                h = 0;
+                m = seconds / 60;
+                s = seconds - 60 * m;
+            }
+            else
+            {
+                h = seconds / 3600;
+                var t = (seconds - 3600 * h);
+                m = t / 60;
+                s = t - m * 60;
+            }
+
+            return string.Format("{0:00}:{1:00}:{2:00}", h, m, s);
+        }
+        public int[] ArrayDiff(int[] a, int[] b)
+        {
+            List<int> result = new List<int>();
+
+            result = a.ToList().Where(x => !b.ToList().Contains(x)).ToList();
+
+            return result.ToArray();
+        }
+
+        public int DigitalRoot(long n)
+        {
+            long result = n;
+
+            while (result.ToString().Length > 1)
+            {
+                result = result.ToString().ToList().Sum(x => Int32.Parse(x.ToString()));
+            }
+
+            return (int)result;
+        }
+        /// <summary>
         /// Все знаки кроме последних 4 заменить
         /// </summary>
         /// <param name="cc"></param>
@@ -83,6 +143,7 @@ namespace Practice
         }
         #endregion
 
+       
 
     }
 }

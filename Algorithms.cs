@@ -16,10 +16,147 @@ namespace Practice
             var alg = new Algorithms();
             string ans = null;
             ans = alg.Reverse(-2147483648).ToString();
+
+            //var test = alg.MaxArea(new int[] { 1, 8, 6, 2, 5, 4, 8, 3, 7 });
+            var test2 = alg.MaxArea(new int[] { 8,7,2,1 });//7
+
             return ans;
         }
 
         #region Solve
+        /// <summary>
+        /// Преобразование строки в число (если первые символы можно преобразовать в число)
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public int MyAtoi(string s)
+        {
+            s = s.TrimStart(' ');
+            if (string.IsNullOrEmpty(s))
+                return 0;
+
+            bool only_num = true;
+            StringBuilder sb = new StringBuilder();
+
+            if (s[0] == '-' || s[0] == '+' || char.IsDigit(s[0]))
+            {
+                sb.Append(s[0]);
+
+                for (int i = 1; i < s.Length; i++)
+                {
+                    if (char.IsDigit(s[i]))
+                        sb.Append(s[i]);
+                    else
+                        break;
+                }
+            }
+            else
+                return 0;
+
+            long result = 0;
+
+            if (!long.TryParse(sb.ToString(), out result))
+            {
+                if (sb.ToString().Length > 0)
+                {
+                    if (s[0] == '-')
+                        return int.MinValue;
+                    else
+                        return int.MaxValue;
+                }
+                else
+                    return 0;
+            }
+
+
+            if (result > int.MaxValue)
+                return int.MaxValue;
+            if (result < int.MinValue)
+                return int.MinValue;
+
+            return (int)result;
+        }
+        /// <summary>
+        /// Поиск максимальной потенциальной прибыли
+        /// </summary>
+        /// <param name="prices"></param>
+        /// <returns></returns>
+        public int MaxProfit(int[] prices)
+        {
+            if (prices.Count() < 2)
+                return 0;
+
+            int current = prices[0];
+            int profit = 0;
+
+            for (int i = 1; i < prices.Count(); i++)
+            {
+                if (prices[i] < current)
+                    current = prices[i];
+                else
+                {
+                    var res = prices[i] - current;
+                    if (res > 0)
+                    {
+                        profit = Math.Max(profit, res);
+                    }
+                }
+            }
+
+            return profit;
+        }
+        /// <summary>
+        /// Поиск произвольной строки в пирамиде Паскаля
+        /// </summary>
+        /// <param name="rowIndex"></param>
+        /// <returns></returns>
+        public IList<int> GetRow(int rowIndex)
+        {
+            if (rowIndex == 0)
+                return new List<int> { 1 };
+            if (rowIndex == 1)
+                return new List<int> { 1, 1 };
+            if (rowIndex == 2)
+                return new List<int> { 1, 2, 1 };
+
+            List<int> result = new List<int>();
+
+            result.Add(1);
+            result.Add(rowIndex);
+            var half = rowIndex / 2;
+            for (int i = 1; i < half; i++)
+            {
+                long m = (long)(result[i]) * (long)(rowIndex - i);
+                result.Add(int.Parse((m / (i + 1)).ToString()));
+            }
+
+            var secondPart = new List<int>(result);
+
+            if (rowIndex % 2 == 0)
+            {
+                secondPart.RemoveAt(result.Count - 1);
+            }
+
+            secondPart.Reverse();
+
+            result = result.Concat(secondPart).ToList();
+
+            return result;
+        }
+        public int Reverse(int x)
+        {
+            int result = 0;
+            if (x <= Int32.MinValue)
+                return 0;
+            string strResult = Math.Abs(x).ToString();
+
+            char[] charArray = strResult.ToCharArray();
+            Array.Reverse(charArray);
+            string reverseResult = string.Format("{0}{1}", x > 0 ? "" : "-", new string(charArray));
+            Int32.TryParse(reverseResult, out result);
+
+            return result;
+        }
         private static TreeNode AddNode(TreeNode node, int num)
         {
             if (num < node.val)
@@ -764,21 +901,36 @@ private string ConvertWordBest(string s, int numRows)
 
         #endregion
 
-        public int Reverse(int x)
+        public int MaxArea(int[] height)
         {
-            int result = 0;
-            if (x <= Int32.MinValue)
-                return 0;
-            string strResult = Math.Abs(x).ToString();
+            //Нужно реализовать проход с 2 сторон и подсчет каждой площади 1 слева посчитал, 1 с права посчитал оба сместил и посчитал
+            int len = height.Length;
+            int leftPosition = 0;
+            int rightPosition = len-1;
+            int result = Math.Min(height[leftPosition], height[rightPosition]) * (len-1);
 
-            char[] charArray = strResult.ToCharArray();
-            Array.Reverse(charArray);
-            string reverseResult = string.Format("{0}{1}", x > 0 ? "" : "-", new string(charArray));  
-            Int32.TryParse(reverseResult,out result);
+            for(int i = len - 1,leftPoint = 1; i >= 1;i--)
+            {
+                if (height[leftPoint] > height[leftPosition])
+                {
+                    leftPosition = leftPoint;
+                }
+
+                if (height[i] > height[rightPosition])
+                {
+                    rightPosition = i;
+                }
+
+                result = Math.Max(Math.Min(height[leftPosition], height[rightPosition]) * (i-1),result);
+
+                if(leftPoint == i)
+                    leftPoint = 1;
+                else
+                    leftPoint++;
+            }
 
             return result;
         }
-
     };
 
 }

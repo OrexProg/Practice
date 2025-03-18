@@ -27,7 +27,7 @@ namespace Practice
         {
             
             tbOutput.Clear();
-            var res = CodeWars.MoveZeroes(new int[] { 0,0,1,2,4,3,8,6,7 });
+            var res = CodeWars.GetReadableTime(340060);//6
             tbOutput.Text = res.ToString();
                 
             //var res = MathSolution.Generate(5);
@@ -49,7 +49,8 @@ namespace Practice
 
         private void btnResMath_Click(object sender, EventArgs e)
         {
-            //tbResMath.Text = MathSolution.MaxPrimeDevisior(Convert.ToInt64(tbMathQuestion.Text)).ToString();
+            tbResMath.Text = Algorithms.ReturnAnswer();
+            
         }
        
 
