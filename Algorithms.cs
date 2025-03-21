@@ -18,12 +18,38 @@ namespace Practice
             ans = alg.Reverse(-2147483648).ToString();
 
             //var test = alg.MaxArea(new int[] { 1, 8, 6, 2, 5, 4, 8, 3, 7 });
-            var test2 = alg.MaxArea(new int[] { 8,7,2,1 });//7
+            var test2 = alg.IntToRoman(3749);//7
 
             return ans;
         }
 
         #region Solve
+        /// <summary>
+        /// Максимальная площадь
+        /// </summary>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        public int MaxArea(int[] height)
+        {
+            //
+            int len = height.Length;
+            int leftPosition = 0;
+            int rightPosition = len - 1;
+            int result = Math.Min(height[leftPosition], height[rightPosition]) * (len - 1);
+
+            while (leftPosition < rightPosition)
+            {
+                int currentSquare = Math.Min(height[leftPosition], height[rightPosition]) * (rightPosition - leftPosition);
+                result = Math.Max(result, currentSquare);
+
+                if (height[leftPosition] > height[rightPosition])
+                    rightPosition--;
+                else
+                    leftPosition++;
+            }
+
+            return result;
+        }
         /// <summary>
         /// Преобразование строки в число (если первые символы можно преобразовать в число)
         /// </summary>
@@ -901,35 +927,83 @@ private string ConvertWordBest(string s, int numRows)
 
         #endregion
 
-        public int MaxArea(int[] height)
+        public string IntToRoman(int num)
         {
-            //Нужно реализовать проход с 2 сторон и подсчет каждой площади 1 слева посчитал, 1 с права посчитал оба сместил и посчитал
-            int len = height.Length;
-            int leftPosition = 0;
-            int rightPosition = len-1;
-            int result = Math.Min(height[leftPosition], height[rightPosition]) * (len-1);
-
-            for(int i = len - 1,leftPoint = 1; i >= 1;i--)
+            string numS = num.ToString();
+            List<int> romanArr = new List<int> { 1, 5, 10, 50, 100, 500, 1000 };
+            Dictionary<int, string> romanDict = new Dictionary<int, string>()
             {
-                if (height[leftPoint] > height[leftPosition])
+                {1,"I" },
+                {5,"V" },
+                {10,"X" },
+                {50,"L" },
+                {100,"C" },
+                {500,"D" },
+                {1000,"M" }
+            };
+            /*
+             
+I	1
+V	5
+X	10
+L	50
+C	100
+D	500
+M	1000
+             
+             */
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i<= numS.Length - 1; i++)
+            {
+                int currentNum = Int32.Parse(numS[i].ToString());
+                int digit = (int)Math.Pow(10, numS.Length -1 -i);
+                
+                switch (currentNum)
                 {
-                    leftPosition = leftPoint;
-                }
+                    case 1:
+                    case 2:
+                    case 3:
+                        var index = romanArr.IndexOf(digit);
+                        var val = romanDict.FirstOrDefault(x => x.Key == digit);
+                        sb.Append(AddRoman(romanDict.ElementAt(index).Value, currentNum));
+                        break;
+                    case 5:
+                            val = romanDict.FirstOrDefault(x => x.Key == currentNum * digit);
+                            sb.Append(val.Value);
+                            break;
+                        case 4:
+                            index = romanArr.IndexOf((currentNum + 1) * digit);
+                            sb.Append(romanDict.ElementAt(index - 1).Value);
+                            sb.Append(romanDict.ElementAt(index).Value);
+                            break;
+                        case 6:
+                        case 7:
+                        case 8:
+                            var dif = currentNum - 5;
+                            index = romanArr.IndexOf(digit);
+                            sb.Append(romanDict.ElementAt(index+1).Value);
+                            sb.Append(AddRoman(romanDict.ElementAt(index).Value, dif));
+                            break;
+                        case 9:
+                            index = romanArr.IndexOf((currentNum + 1) * digit);
+                            sb.Append(romanDict.ElementAt(index - 2).Value);
+                            sb.Append(romanDict.ElementAt(index).Value);
+                            break;
 
-                if (height[i] > height[rightPosition])
-                {
-                    rightPosition = i;
-                }
-
-                result = Math.Max(Math.Min(height[leftPosition], height[rightPosition]) * (i-1),result);
-
-                if(leftPoint == i)
-                    leftPoint = 1;
-                else
-                    leftPoint++;
+                        }
             }
 
-            return result;
+            return sb.ToString();
+        }
+
+        private string AddRoman(string word,int count)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            for(int i = 0;i<count;i++)
+                sb.Append(word);
+
+            return sb.ToString();
         }
     };
 
