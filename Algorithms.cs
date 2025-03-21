@@ -16,14 +16,71 @@ namespace Practice
             var alg = new Algorithms();
             string ans = null;
             ans = alg.Reverse(-2147483648).ToString();
-
-            //var test = alg.MaxArea(new int[] { 1, 8, 6, 2, 5, 4, 8, 3, 7 });
-            var test2 = alg.IntToRoman(3749);//7
+            
+           var t = alg.FindMedianSortedArrays(new int[] { 1, 2, 3, 4, 5 }, new int[] { 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 });
+           
+            
 
             return ans;
         }
 
         #region Solve
+        /// <summary>
+        /// Поиск медианы в отсортированных массивах
+        /// </summary>
+        /// <param name="nums1"></param>
+        /// <param name="nums2"></param>
+        /// <returns></returns>
+        public double FindMedianSortedArrays(int[] nums1, int[] nums2)
+        {
+            int arr1Len = nums1.Length;
+            int arr2Len = nums2.Length;
+            int allCount = arr1Len + arr2Len;
+            List<int> result = new List<int>();
+            int median = allCount / 2;
+
+            int left = 0;
+            int right = 0;
+
+            for (int i = 0; i <= median; i++)
+            {
+                if (left > arr1Len - 1)
+                {
+                    result.Add(nums2[right]);
+                    right++;
+                    continue;
+                }
+
+                if (right > arr2Len - 1)
+                {
+                    result.Add(nums1[left]);
+                    left++;
+                    continue;
+                }
+
+                if (nums1[left] > nums2[right])
+                {
+                    result.Add(nums2[right]);
+                    right++;
+                }
+                else
+                {
+                    result.Add(nums1[left]);
+                    left++;
+                }
+            }
+
+            int count = result.Count;
+
+            if (allCount % 2 == 0)
+            {
+                return (double)(result[count - 1] + result[count - 2]) / (double)2;
+            }
+            else
+                return (double)result[count - 1];
+
+        }
+
         /// <summary>
         /// Максимальная площадь
         /// </summary>
@@ -925,8 +982,12 @@ private string ConvertWordBest(string s, int numRows)
             return string.Concat(result);
         }
 
-        #endregion
-
+        #region Конвертируем арабское число в римское
+        /// <summary>
+        /// Конвертируем арабское число в римское
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
         public string IntToRoman(int num)
         {
             string numS = num.ToString();
@@ -941,23 +1002,12 @@ private string ConvertWordBest(string s, int numRows)
                 {500,"D" },
                 {1000,"M" }
             };
-            /*
-             
-I	1
-V	5
-X	10
-L	50
-C	100
-D	500
-M	1000
-             
-             */
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i<= numS.Length - 1; i++)
+            for (int i = 0; i <= numS.Length - 1; i++)
             {
                 int currentNum = Int32.Parse(numS[i].ToString());
-                int digit = (int)Math.Pow(10, numS.Length -1 -i);
-                
+                int digit = (int)Math.Pow(10, numS.Length - 1 - i);
+
                 switch (currentNum)
                 {
                     case 1:
@@ -968,43 +1018,47 @@ M	1000
                         sb.Append(AddRoman(romanDict.ElementAt(index).Value, currentNum));
                         break;
                     case 5:
-                            val = romanDict.FirstOrDefault(x => x.Key == currentNum * digit);
-                            sb.Append(val.Value);
-                            break;
-                        case 4:
-                            index = romanArr.IndexOf((currentNum + 1) * digit);
-                            sb.Append(romanDict.ElementAt(index - 1).Value);
-                            sb.Append(romanDict.ElementAt(index).Value);
-                            break;
-                        case 6:
-                        case 7:
-                        case 8:
-                            var dif = currentNum - 5;
-                            index = romanArr.IndexOf(digit);
-                            sb.Append(romanDict.ElementAt(index+1).Value);
-                            sb.Append(AddRoman(romanDict.ElementAt(index).Value, dif));
-                            break;
-                        case 9:
-                            index = romanArr.IndexOf((currentNum + 1) * digit);
-                            sb.Append(romanDict.ElementAt(index - 2).Value);
-                            sb.Append(romanDict.ElementAt(index).Value);
-                            break;
+                        val = romanDict.FirstOrDefault(x => x.Key == currentNum * digit);
+                        sb.Append(val.Value);
+                        break;
+                    case 4:
+                        index = romanArr.IndexOf((currentNum + 1) * digit);
+                        sb.Append(romanDict.ElementAt(index - 1).Value);
+                        sb.Append(romanDict.ElementAt(index).Value);
+                        break;
+                    case 6:
+                    case 7:
+                    case 8:
+                        var dif = currentNum - 5;
+                        index = romanArr.IndexOf(digit);
+                        sb.Append(romanDict.ElementAt(index + 1).Value);
+                        sb.Append(AddRoman(romanDict.ElementAt(index).Value, dif));
+                        break;
+                    case 9:
+                        index = romanArr.IndexOf((currentNum + 1) * digit);
+                        sb.Append(romanDict.ElementAt(index - 2).Value);
+                        sb.Append(romanDict.ElementAt(index).Value);
+                        break;
 
-                        }
+                }
             }
 
             return sb.ToString();
         }
 
-        private string AddRoman(string word,int count)
+        private string AddRoman(string word, int count)
         {
             StringBuilder sb = new StringBuilder();
 
-            for(int i = 0;i<count;i++)
+            for (int i = 0; i < count; i++)
                 sb.Append(word);
 
             return sb.ToString();
         }
+        #endregion
+
+        #endregion
+        
     };
 
 }
