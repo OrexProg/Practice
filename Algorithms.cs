@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.WebSockets;
+using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,16 +17,124 @@ namespace Practice
         {
             var alg = new Algorithms();
             string ans = null;
-            ans = alg.Reverse(-2147483648).ToString();
-            
-           var t = alg.FindMedianSortedArrays(new int[] { 1, 2, 3, 4, 5 }, new int[] { 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 });
-           
-            
+            /*
+             
+             */
+            var t2 = alg.ThreeSum(new int[] { -2, 0, 1, 1, 2 });
 
             return ans;
         }
 
+
+
+        //*/
         #region Solve
+        /// <summary>
+        /// Вернуть список масиивов (из 3 чисел) сумма которых даст 0 
+        /// </summary>
+        /// <param name="nums"></param>
+        /// <returns></returns>
+        IList<IList<int>> ThreeSum(int[] nums)
+        {
+            var resulList = new List<IList<int>>();
+
+            var numsList = nums.ToList();
+
+            if (numsList.Count < 3)
+                return resulList;
+            else if (numsList.Count == 3)
+            {
+                if (numsList.Sum() == 0)
+                {
+                    resulList.Add(numsList);
+                    return resulList;
+                }
+            }
+
+            numsList.Sort();
+
+            for (int i = 0; i < numsList.Count - 1; i++)
+            {
+                var currentPoint = numsList[i];
+                var left = i + 1;
+                var right = numsList.Count - 1;
+                while (left < right)
+                {
+                    var sumPoint = numsList[left] + numsList[right] + currentPoint;
+                    if (sumPoint == 0)
+                    {
+                        var answer = new List<int> { currentPoint, numsList[left], numsList[right] };
+                        resulList.Add(answer);
+                        while (left < right && numsList[left] == answer[1])
+                            left++;
+                        while (right > left && numsList[right] == answer[2])
+                            right--;
+                    }
+                    switch (sumPoint)
+                    {
+                        case < 0:
+                            left++;
+                            break;
+                        case > 0:
+                            right--;
+                            break;
+                    }
+                }
+                while (i < numsList.Count - 1 && numsList[i] == numsList[i + 1])
+                    i++;
+            }
+            return resulList.ToList();
+        }
+        /// <summary>
+        /// Вывод единственного повторяющегося числа из списка
+        /// </summary>
+        /// <param name="nums"></param>
+        /// <returns></returns>
+        int SingleNumber(int[] nums)
+        {
+            var result = -1;
+
+            result = nums.GroupBy(x => x).Where(x => x.Count() == 1).Select(x => x.Key).FirstOrDefault();
+
+            return result;
+        }
+        /// <summary>
+        /// Проверка что предложение полиндром
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        bool IsPalindrome(string s)
+        {
+            s = s.ToLower();
+            var len = s.Length;
+            var begin = 0;
+            var end = len - 1;
+            bool result = true;
+            while (begin < end && result)
+            {
+                char leftSym;
+                char rightSym;
+
+                while (!char.IsLetterOrDigit(s[begin]) && begin < end)
+                {
+                    begin++;
+                }
+                leftSym = s[begin];
+                while (!char.IsLetterOrDigit(s[end]) && begin < end)
+                {
+                    end--;
+                }
+                rightSym = s[end];
+                if (begin == end)
+                    result = true;
+                if (rightSym != leftSym)
+                    result = false;
+                begin++;
+                end--;
+            }
+
+            return result;
+        }
         /// <summary>
         /// Поиск медианы в отсортированных массивах
         /// </summary>

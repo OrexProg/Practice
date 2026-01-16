@@ -1,20 +1,123 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 
 namespace Practice
 {
     public class CodeWars
     {
+        public static void SpeedTest()
+        {
+            var time = new Stopwatch();
+        }
+        static List<char> list = new List<char>() { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+        public static string Encode(string input)
+        {
+            if(string.IsNullOrEmpty(input))
+                return input;
+            StringBuilder result = new StringBuilder();
+            int? previousPosition = null;
+            var wordToChar = input.ToUpper().ToCharArray();
+
+            foreach (var item in wordToChar)
+            {
+                int currentPosition = list.IndexOf(item);
+                if(currentPosition != -1)
+                {
+                    if(previousPosition != null)
+                    {
+                        var newIndex = ((int)currentPosition + (int)previousPosition+1) % list.Count();
+                        result.Append(list[newIndex]);
+                        previousPosition = currentPosition;
+                    }
+                    else
+                    {
+                        previousPosition = currentPosition;
+                        result.Append(item);
+                    }
+                }
+                else
+                    result.Append(item);
+            }
+
+            return result.ToString();
+        }
+        public static string Decode(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return string.Empty;
+            StringBuilder result = new StringBuilder();
+            int? previousPosition = null;
+            var wordToChar = input.ToUpper().ToCharArray();
+
+            foreach (var item in wordToChar)
+            {
+                int currentPosition = list.IndexOf(item);
+                if (currentPosition != -1)
+                {
+                    if (previousPosition != null)
+                    {
+                        var newIndex = ((int)currentPosition - (int)previousPosition - 1) % list.Count();
+                        if (newIndex < 0)
+                            newIndex += list.Count();
+                        result.Append(list[newIndex]);
+                        previousPosition = newIndex;
+                    }
+                    else
+                    {
+                        previousPosition = currentPosition;
+                        result.Append(item);
+                    }
+                }
+                else
+                    result.Append(item);
+            }
+
+            return result.ToString();
+        }
+
         #region Решено
+        /// <summary>
+        /// Считаем максимальную длинну змейки
+        /// </summary>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        private BigInteger Sum(BigInteger size)
+        {
+            if (size % 2 == 0)
+                return (BigInteger)(size * size) / 2 + size - 1;
+            else
+                return ((BigInteger)size * size + 2 * size - 1) / 2;
+        }
+        /// <summary>
+        /// Необходимо проверить сколько букв стоит в том же месте у второго слова
+        /// </summary>
+        /// <param name="correctWord"></param>
+        /// <param name="guess"></param>
+        /// <returns></returns>
+        private int CountCorrectCharacters(string correctWord, string guess)
+        {
+            if (correctWord.Length != guess.Length)
+                throw new InvalidOperationException();
+            var result = 0;
+            var len = correctWord.Length;
+            for (int i = 0; i < len && i < guess.Length; i++)
+            {
+                if (correctWord[i] == guess[i])
+                    result++;
+            }
+            return result;
+        }
 
         /// <summary>
         /// Возвращаем время из секуннд в формате чч:мм:сс
         /// </summary>
         /// <param name="seconds"></param>
         /// <returns></returns>
-        public static string GetReadableTime(int seconds)
+        private string GetReadableTime(int seconds)
         {
             /*
               Лучший вариант
@@ -142,8 +245,5 @@ namespace Practice
             return result;
         }
         #endregion
-
-       
-
     }
 }

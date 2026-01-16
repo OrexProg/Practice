@@ -27,9 +27,13 @@ namespace Practice
         {
             
             tbOutput.Clear();
-            var res = CodeWars.GetReadableTime(340060);//6
-            tbOutput.Text = res.ToString();
-                
+            //CodeWars.SpeedTest();
+            var t1 = CodeWars.Encode("He1lo");//HM1QA
+            var t2 = CodeWars.Decode(t1);
+
+            //var res = CodeWars.GetReadableTime(340060);//6
+            //tbOutput.Text = res.ToString();
+
             //var res = MathSolution.Generate(5);
             //110101
         }
