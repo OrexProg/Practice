@@ -9,14 +9,154 @@ namespace Practice
 {
     public class CodeWars
     {
-        public static void SpeedTest()
+        public static string SpeedTest()
         {
+            StringBuilder sb = new StringBuilder();
             var time = new Stopwatch();
+            time.Start();
+            CodeWars.Solution("samurai", "ai");
+            CodeWars.Solution("sumo", "omo");
+            CodeWars.Solution("ninja", "ja");
+            CodeWars.Solution("sensei", "i");
+            CodeWars.Solution("samurai", "ra");
+            CodeWars.Solution("abc", "abcd");
+            CodeWars.Solution("abc", "abc");
+            time.Stop();
+            sb.Append($"Мое время {time.ElapsedMilliseconds} Тики {time.ElapsedTicks}\r\n");
+            time.Reset();
+            time.Start();
+            CodeWars.Solution("samurai", "ai");
+            CodeWars.Solution("sumo", "omo");
+            CodeWars.Solution("ninja", "ja");
+            CodeWars.Solution("sensei", "i");
+            CodeWars.Solution("samurai", "ra");
+            CodeWars.Solution("abc", "abcd");
+            CodeWars.Solution("abc", "abc");
+            time.Stop();
+            sb.Append($"Второе время {time.ElapsedMilliseconds} Тики {time.ElapsedTicks}\r\n");
+            return sb.ToString();
         }
-        static List<char> list = new List<char>() { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
-        public static string Encode(string input)
+        /// <summary>
+        /// Проверка на идеальное число
+        /// Идеальное число это то которое можно представить ввиде степени n = m^k
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        public static (int, int)? IsPerfectPower(int n)
         {
-            if(string.IsNullOrEmpty(input))
+            int k = 2;
+            int kMax = (int)Math.Round(Math.Log2(n)) + 1;
+
+            while (k <= kMax)
+            {
+                var m = Math.Pow(n, (double)1 / (double)k);
+                m = Math.Round(m);
+                if (Math.Pow(Math.Round(m),k) ==n)
+                    return ((int)m, (int)k);
+
+                k++;
+            }
+
+            return null;
+        }
+
+        #region Решено
+
+        /// <summary>
+        /// Нужно пострить квадрат 4 на 4 из блоков которые дают
+        /// </summary>
+        /// <param name="blocks"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        bool BuildSquare(int[] blocks)
+        {
+            if (blocks.Length < 4)
+                return false;
+
+            Dictionary<int, int> countBlocks = new Dictionary<int, int>();
+            if (blocks.Where(x => x == 4).Count() > 3)
+                return true;
+
+            foreach (var item in blocks.GroupBy(x => x).Select(x => new int[] { x.Key, x.Count() }))
+            {
+                countBlocks.Add(item[0], item[1]);
+            }
+
+            int tall = 0;
+
+            if (countBlocks.ContainsKey(4))
+                tall = countBlocks[4];
+
+            if (countBlocks.ContainsKey(3) && countBlocks.ContainsKey(1))
+            {
+                int maxCountPair = Math.Min(countBlocks[3], countBlocks[1]);
+                countBlocks[1] = countBlocks[1] - maxCountPair;
+                tall += maxCountPair;
+                if (tall >= 4)
+                    return true;
+            }
+
+            if (countBlocks.ContainsKey(2))
+            {
+                int maxPair2 = countBlocks[2] / 2;
+                countBlocks[2] = countBlocks[2] - maxPair2;
+                tall += maxPair2;
+                if (tall >= 4)
+                    return true;
+                if (countBlocks.ContainsKey(1))
+                {
+                    var maxPair1 = countBlocks[1] / 2;
+                    var pairs1and2 = Math.Min(maxPair1, countBlocks[2]);
+                    tall += pairs1and2;
+                    if (tall >= 4)
+                        return true;
+                    countBlocks[1] = countBlocks[1] - (pairs1and2 * 2);
+                }
+            }
+
+            if (countBlocks.ContainsKey(1))
+            {
+                tall += countBlocks[1] / 4;
+                if (tall >= 4)
+                    return true;
+            }
+
+            return tall >= 4;
+        }
+
+        /// <summary>
+        /// По милисекундам незначительно но по тикам 2 вариант значительно быстрее
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="ending"></param>
+        /// <returns></returns>
+        static bool Solution2(string str, string ending) => str.EndsWith(ending);
+
+        static bool Solution(string str, string ending)
+        {
+            //тоже самое можно сделать через   str.EndsWith(ending);
+
+            var left = str.Length - 1;
+            var right = ending.Length - 1;
+
+            if (right > left)
+                return false;
+
+            while (right >= 0 && left >= 0)
+            {
+                if (str[left] != ending[right])
+                    return false;
+                left--;
+                right--;
+            }
+
+            return true;
+        }
+
+        static List<char> list = new List<char>() { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+        static string Encode(string input)
+        {
+            if (string.IsNullOrEmpty(input))
                 return input;
             StringBuilder result = new StringBuilder();
             int? previousPosition = null;
@@ -25,11 +165,11 @@ namespace Practice
             foreach (var item in wordToChar)
             {
                 int currentPosition = list.IndexOf(item);
-                if(currentPosition != -1)
+                if (currentPosition != -1)
                 {
-                    if(previousPosition != null)
+                    if (previousPosition != null)
                     {
-                        var newIndex = ((int)currentPosition + (int)previousPosition+1) % list.Count();
+                        var newIndex = ((int)currentPosition + (int)previousPosition + 1) % list.Count();
                         result.Append(list[newIndex]);
                         previousPosition = currentPosition;
                     }
@@ -45,7 +185,7 @@ namespace Practice
 
             return result.ToString();
         }
-        public static string Decode(string input)
+        static string Decode(string input)
         {
             if (string.IsNullOrEmpty(input))
                 return string.Empty;
@@ -79,7 +219,6 @@ namespace Practice
             return result.ToString();
         }
 
-        #region Решено
         /// <summary>
         /// Считаем максимальную длинну змейки
         /// </summary>

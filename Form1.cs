@@ -27,27 +27,34 @@ namespace Practice
         {
             
             tbOutput.Clear();
-            //CodeWars.SpeedTest();
-            var t1 = CodeWars.Encode("He1lo");//HM1QA
-            var t2 = CodeWars.Decode(t1);
+            //tbOutput.Text = CodeWars.SpeedTest();
 
-            //var res = CodeWars.GetReadableTime(340060);//6
             //tbOutput.Text = res.ToString();
 
             //var res = MathSolution.Generate(5);
-            //110101
+
+            var t = CodeWars.IsPerfectPower(14886936);
+            var t2 = CodeWars.IsPerfectPower(9);
+            var t3 = CodeWars.IsPerfectPower(81);
         }
 
         public class TreeNode
         {
             public int? val;
+            public TreeNode parent;
             public TreeNode left;
             public TreeNode right;
+            public bool isAddLeft;
+            public bool isAddRight;
+            public bool endLeaf;
             public TreeNode(int? val = 0, TreeNode left = null, TreeNode right = null)
             {
                 this.val = val;
                 this.left = left;
                 this.right = right;
+                this.isAddLeft = false;
+                this.isAddRight = false;
+                this.endLeaf = val == null;
             }
         }
 

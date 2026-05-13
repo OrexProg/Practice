@@ -6,29 +6,338 @@ using System.Net.WebSockets;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using static Practice.Form1;
+using TreeNode = Practice.Form1.TreeNode;
 
 namespace Practice
 {
     public class Algorithms
     {
-        public static string ReturnAnswer()
+        #region Вспомогательные классы
+        
+        
+        public class ListNode
         {
-            var alg = new Algorithms();
-            string ans = null;
-            /*
-             
-             */
-            var t2 = alg.ThreeSum(new int[] { -2, 0, 1, 1, 2 });
-
-            return ans;
+            public int val;
+            public ListNode next;
+            public ListNode(int x)
+            {
+                val = x;
+                next = null;
+            }
         }
 
+        #endregion
+
+        #region Заполненение вспомогательных классов
+        /// <summary>
+        /// Добавляем новые ветки включая null
+        /// </summary>
+        /// <param name="tree"></param>
+        /// <param name="value"></param>
+        private void AddNodeWithoutBalance(TreeNode tree, int? value)
+        {
+            Queue<TreeNode> nodeInQueForFind = new Queue<TreeNode>();
+            nodeInQueForFind.Enqueue(tree);
+            var currentTreeToAdd = FindFirstEmptyNode(nodeInQueForFind);
+            if (!currentTreeToAdd.isAddLeft)
+            {
+                currentTreeToAdd.isAddLeft = true;
+                currentTreeToAdd.left = new TreeNode(value);
+                currentTreeToAdd.left.parent = currentTreeToAdd;
+            }
+            else
+            {
+                currentTreeToAdd.isAddRight = true;
+                currentTreeToAdd.right = new TreeNode(value); 
+                currentTreeToAdd.right.parent = currentTreeToAdd;
+            }
+            
+        }
+        private TreeNode FindFirstEmptyNode(Queue<TreeNode> nodeInQueForFind)
+        {
+            TreeNode result = nodeInQueForFind.Dequeue();
+
+            if (!result.isAddLeft || !result.isAddRight)
+                return result;
+
+            result.endLeaf = result.endLeaf || (result.left.endLeaf && result.right.endLeaf);
+
+            if (result.endLeaf)
+            {
+                return FindFirstEmptyNode(nodeInQueForFind);
+            }
+
+            if (!result.left.endLeaf)
+                nodeInQueForFind.Enqueue(result.left);
+            if (!result.right.endLeaf)
+                nodeInQueForFind.Enqueue(result.right);
+
+            return FindFirstEmptyNode(nodeInQueForFind);
+        }
+
+        #endregion
+
+        static ListNode testNode;
+        public static string CheckSpeed()
+        {
+            var alg = new Algorithms();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            var t3 = alg.LetterCombinations("273");
+            var t4 = alg.LetterCombinations("234");
+            sw.Stop();
+            var resultMilliSecMy = sw.ElapsedMilliseconds;
+            var resultTickMy = sw.ElapsedTicks;
+            sw.Reset();
+            sw.Restart();
+            var t1 = alg.LetterCombinationsSpeed("273");
+            var t2 = alg.LetterCombinationsSpeed("234");
+            sw.Stop();
+            var resultMilliSec = sw.ElapsedMilliseconds;
+            var resultTick = sw.ElapsedTicks;
+
+            var result = $"Мое время {resultMilliSecMy} милисек {resultTickMy} тик\r\n" +
+                $"Быс. врем {resultMilliSec} милисек {resultTick} тик";
+
+            return result;
+        }
+        public static string ReturnAnswer()
+        {
+            
+            string ans = null;
+            int[] quest = new int[] { 10, 20, 30, 40, 50, 60, 70, 80, 90 };
+            //nums = [], target = 1
+            var alg = new Algorithms();
+            var t3 = alg.LetterCombinations("273");
+            var t4 = alg.LetterCombinations("234");
+            var t1 = alg.LetterCombinationsSpeed("273");
+            var t2 = alg.LetterCombinationsSpeed("234");
+            return CheckSpeed();//4,6,7,5,2,9,8,3,1
+        }
+        public bool IsMatch(string s, string p)
+        {
+            return Regex.Match(s, p).Value.Equals(s);
+        }
 
 
         //*/
         #region Solve
+
+        /// <summary>
+        /// 17. Letter Combinations of a Phone Number
+        /// Дана последовотельность цифр необходимо вывести комбинацию букв каждая с каждой
+        /// </summary>
+        /// <param name="digits"></param>
+        /// <returns></returns>
+        IList<string> LetterCombinationsSpeed(string digits)
+        {
+            List<string> result = new List<string>() { "" };
+            string[] map = new string[] { "0", "1", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz" };
+
+            foreach (char digit in digits)
+            {
+                List<string> temp = new List<string>();
+
+                foreach (string current in result)
+                {
+                    foreach (char letter in map[(int)char.GetNumericValue(digit)])
+                        temp.Add(current + letter);
+                }
+
+                result = temp;
+            }
+
+            return result;
+        }
+        private Dictionary<char, List<char>> DictionaryWithLetter()
+        {
+            Dictionary<char, List<char>> dict = new Dictionary<char, List<char>>();
+            dict.Add('2', new List<char>() { 'a', 'b', 'c' });
+            dict.Add('3', new List<char>() { 'd', 'e', 'f' });
+            dict.Add('4', new List<char>() { 'g', 'h', 'i' });
+            dict.Add('5', new List<char>() { 'j', 'k', 'l' });
+            dict.Add('6', new List<char>() { 'm', 'n', 'o' });
+            dict.Add('7', new List<char>() { 'p', 'q', 'r', 's' });
+            dict.Add('8', new List<char>() { 't', 'u', 'v' });
+            dict.Add('9', new List<char>() { 'w', 'x', 'y', 'z' });
+            return dict;
+        }
+        IList<string> LetterCombinations(string digits)
+        {
+
+            //Нужно уточнить алгоритм!!!
+            Dictionary<char, List<char>> dict = new Dictionary<char, List<char>>();
+            dict = DictionaryWithLetter();
+
+            if (string.IsNullOrEmpty(digits))
+                return new List<string>();
+            if (digits.Length == 1)
+                return dict[digits[0]].Select(x => x.ToString()).ToList();
+
+            List<StringBuilder> stringBuilders = new List<StringBuilder>();
+            var lenWord = digits.Length;
+            for (int i_key = 0; i_key < lenWord; i_key++)
+            {
+                if (!stringBuilders.Any())
+                {
+                    var leters = dict[digits[i_key]];
+                    leters.ToList().ForEach(x => stringBuilders.Add(new StringBuilder(x.ToString())));
+                }
+                else
+                {
+                    var copyStringVuilders = stringBuilders.GetRange(0, stringBuilders.Count());
+                    var letters = dict[digits[i_key]];
+                    for (int l = 1; l < letters.Count(); l++)
+                    {
+                        copyStringVuilders.ForEach(x =>
+                        {
+                            stringBuilders.Add(new StringBuilder(x.ToString()));
+                        });
+                    }
+                    var length = stringBuilders.Count();
+                    var counCopyOneLetter = length / letters.Count();
+                    var currentLetterIndex = 0;
+                    for (int strBuildCount = 0; strBuildCount < length;)
+                    {
+                        for (int i = 0; i < counCopyOneLetter; i++)
+                        {
+                            stringBuilders[strBuildCount].Append(letters[currentLetterIndex]);
+                            strBuildCount++;
+                        }
+                        currentLetterIndex++;
+                    }
+                }
+            }
+
+            return stringBuilders.Select(x => x.ToString()).OrderBy(x => x).ToList();
+        }
+
+        int ThreeSumClosest(int[] nums, int target)
+        {
+            //Тестить нужно, примерный план накидал
+            var result = int.MaxValue;
+            var currentDiff = int.MaxValue;
+            if (nums.Length == 3)
+                return nums.Sum();
+
+            var currentPosition = 0;
+            var numList = nums.ToList();
+            numList.Sort();
+
+            while (currentPosition < nums.Length - 2)
+            {
+                var leftPos = currentPosition + 1;
+                var rightPos = nums.Length - 1;
+                while (leftPos < rightPos)
+                {
+                    var sum = numList[currentPosition] + numList[rightPos] + numList[leftPos];
+                    if (sum == target)
+                        return sum;
+                    if (sum > target)
+                    {
+                        rightPos--;
+                    }
+                    else
+                        leftPos++;
+
+                    var modAnsw = Math.Abs(target - sum);
+                    if (Math.Abs(currentDiff) > modAnsw)
+                    {
+                        result = sum;
+                        currentDiff = modAnsw;
+                    }
+
+                }
+
+                currentPosition++;
+            }
+
+            return result;
+        }
+
+        IList<int> PostorderTraversal(TreeNode root)
+        {
+            List<int> result = new List<int>();
+            if (root == null)
+                return result;
+            Stack<TreeNode> q = new Stack<TreeNode>();
+
+            q.Push(root);
+
+            while (q.Count > 0)
+            {
+
+                var currentNode = q.Pop();
+                if (currentNode.val != null)
+                {
+                    result.Add(currentNode.val.Value);
+                }
+
+
+                if (currentNode.left != null && currentNode.left.val != null)
+                {
+                    q.Push(currentNode.left);
+                }
+
+                if (currentNode.right != null && currentNode.right.val != null)
+                {
+                    q.Push(currentNode.right);
+                }
+            }
+            result.Reverse();
+            return result;
+        }
+        /// <summary>
+        /// Вывод всех веток слева направа (ТОП решение, на сайте я лучше 100% (по крайне мере на момент публикации))
+        /// </summary>
+        /// <param name="root"></param>
+        /// <returns></returns>
+        IList<int> PreorderTraversal(TreeNode root)
+        {
+            List<int> result = new List<int>();
+
+            Stack<TreeNode> stack = new Stack<TreeNode>();
+            stack.Push(root);
+
+            while (stack.Count > 0)
+            {
+                var currentNode = stack.Pop();
+                if (currentNode.val != null)
+                {
+                    result.Add(currentNode.val ?? -1);
+                }
+                if (currentNode.right != null && currentNode.right.val != null)
+                    stack.Push(currentNode.right);
+                if (currentNode.left != null && currentNode.left.val != null)
+                    stack.Push(currentNode.left);
+            }
+
+            return result;
+        }
+
+        bool HasCycle(ListNode head)
+        {
+            if (head == null)
+                return false;
+
+            ListNode nextOnce = head;
+            ListNode nextTwice = head;
+
+            while (nextTwice != null && nextTwice.next != null)
+            {
+                nextOnce = nextOnce.next;
+                nextTwice = nextTwice.next.next;
+
+                if (nextOnce == nextTwice)
+                    return true;
+            }
+
+            return false;
+        }
         /// <summary>
         /// Вернуть список масиивов (из 3 чисел) сумма которых даст 0 
         /// </summary>
